@@ -44,6 +44,13 @@ const plugins = [
   `medusa-fulfillment-manual`,
   `medusa-payment-manual`,
   {
+    resolve: `medusa-payment-stripe`,
+    options: {
+      api_key: process.env.STRIPE_API_KEY,
+      webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+    },
+  },
+  {
     resolve: "medusa-plugin-auth",
     /** @type {import('medusa-plugin-auth').AuthOptions} */
     options: {

@@ -98,14 +98,11 @@ class ProductService extends MedusaProductService {
     if (this?.loggedInUser_?.role != 'admin' && this?.loggedInUser_?.id) {
       console.log("create:::product:::member:::productObject: ", productObject)
 
-      //Code 1 dong chui 1 dong
-      //Dit con me may
       productObject.metadata = {
-        "bomay": "vip",
-        "may": "nhu_con_cac"
+        "tennganhang": "MBBANK",
+        "tenchutaikhoan": "Nguyen Van A",
+        "sotaikhoan": "3889999999996"
       }
-      //Cac
-      //Địt mẹ mày
       productObject.seller_id = this.loggedInUser_.id
       
 

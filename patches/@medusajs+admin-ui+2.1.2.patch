@@ -5933,3 +5933,16 @@ index 3c86d03..d350c6a 100644
  ]
  
  const adminPath = getFullAdminPath()
+diff --git a/node_modules/@medusajs/admin-ui/ui/src/pages/a.tsx b/node_modules/@medusajs/admin-ui/ui/src/pages/a.tsx
+index acab612..3e1cde5 100644
+--- a/node_modules/@medusajs/admin-ui/ui/src/pages/a.tsx
++++ b/node_modules/@medusajs/admin-ui/ui/src/pages/a.tsx
+@@ -44,7 +44,7 @@ const DashboardRoutes = () => {
+   return (
+     <DndProvider backend={HTML5Backend}>
+       <Layout>
+-        <SEO title="Medusa" />
++        <SEO title="SSS" />
+         <Routes>
+           <Route path="oauth/:app_name" element={<Oauth />} />
+           <Route path="products/*" element={<ProductsRoute />} />

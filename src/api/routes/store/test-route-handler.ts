@@ -13,10 +13,8 @@ export default async (req: Request, res: Response): Promise<void> => {
   };
   const id = "des_22222"
   // const result = await depositService.create(data)
-  const result = await depositService.update(id, data)
-  console.log("result: ", result)
+  // const result = await depositService.update(id, data)
   res.json({
-    result: result,
-    hello: "world"
+    hello: "123"
   })
 }

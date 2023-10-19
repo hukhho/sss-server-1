@@ -38,9 +38,9 @@ export default (rootDirectory: string): Router | Router[] => {
   const router = Router();
 
   // Set up root routes for store and admin endpoints, with appropriate CORS settings
-  router.use("/payment", cors(storeCorsOptions), bodyParser.json());
-  router.use("/store", cors(storeCorsOptions), bodyParser.json());
-  router.use("/admin", cors(adminCorsOptions), bodyParser.json());
+  router.use("/payment", cors(customCorsOptions), bodyParser.json());
+  router.use("/store", cors(customCorsOptions), bodyParser.json());
+  router.use("/admin", cors(customCorsOptions), bodyParser.json());
   router.use("/admin/custom", cors(customCorsOptions), bodyParser.json());
 
   // Add authentication to all admin routes *except* auth and account invite ones

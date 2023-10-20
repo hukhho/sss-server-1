@@ -1,6 +1,10 @@
 const dotenv = require("dotenv");
 
 let ENV_FILE_NAME = "";
+
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+console.log("NODE_ENV", process.env.NODE_ENV);
+
 switch (process.env.NODE_ENV) {
   case "production":
     ENV_FILE_NAME = ".env.production";
@@ -64,8 +68,8 @@ const plugins = [
           // The success redirect can be overriden from the client by adding a query param `?redirectTo=your_url` to the auth url
           // This query param will have the priority over this configuration
           successRedirect: `${ADMIN_URL}/a/products`,
-          authPath: '/admin/auth/google',
-          authCallbackPath: '/admin/auth/google/cb',
+          authPath: "/admin/auth/google",
+          authCallbackPath: "/admin/auth/google/cb",
           expiresIn: 24 * 60 * 60 * 1000,
           // verifyCallback: (container, req, accessToken, refreshToken, profile, strict) => {
           //   console.log("req: ", req)
@@ -108,38 +112,26 @@ const plugins = [
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
       autoRebuild: true,
-      
       develop: {
         open: process.env.OPEN_BROWSER !== "false",
       },
     },
   },
-  // {
-  //   resolve: `medusa-plugin-contentful`,
-  //   options: {
-  //     space_id: process.env.CONTENTFUL_SPACE_ID,
-  //     access_token: process.env.CONTENTFUL_ACCESS_TOKEN,
-  //     environment: process.env.CONTENTFUL_ENV,
-  //     custom_product_fields: {
-  //       title: "name",
-  //     },
-  //   },
-  // },
 ];
 
 const modules = {
-  /*eventBus: {
+  eventBus: {
     resolve: "@medusajs/event-bus-redis",
     options: {
-      redisUrl: REDIS_URL
-    }
+      redisUrl: REDIS_URL,
+    },
   },
   cacheService: {
     resolve: "@medusajs/cache-redis",
     options: {
-      redisUrl: REDIS_URL
-    }
-  },*/
+      redisUrl: REDIS_URL,
+    },
+  },
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
@@ -150,7 +142,7 @@ const projectConfig = {
   database_url: DATABASE_URL,
   admin_cors: ADMIN_CORS,
   // Uncomment the following lines to enable REDIS
-  // redis_url: REDIS_URL
+  redis_url: REDIS_URL,
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule} */

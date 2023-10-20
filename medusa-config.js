@@ -108,11 +108,23 @@ const plugins = [
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
       autoRebuild: true,
+      
       develop: {
         open: process.env.OPEN_BROWSER !== "false",
       },
     },
   },
+  // {
+  //   resolve: `medusa-plugin-contentful`,
+  //   options: {
+  //     space_id: process.env.CONTENTFUL_SPACE_ID,
+  //     access_token: process.env.CONTENTFUL_ACCESS_TOKEN,
+  //     environment: process.env.CONTENTFUL_ENV,
+  //     custom_product_fields: {
+  //       title: "name",
+  //     },
+  //   },
+  // },
 ];
 
 const modules = {

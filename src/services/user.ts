@@ -5,7 +5,7 @@ import { CreateUserInput as MedusaCreateUserInput } from "@medusajs/medusa/dist/
 import StoreRepository from "@medusajs/medusa/dist/repositories/store"
 
 type CreateUserInput = {
-
+    coin?: number
 } & MedusaCreateUserInput
 
 class UserService extends MedusaUserService {
@@ -26,8 +26,9 @@ class UserService extends MedusaUserService {
     }
 
     async create(user: CreateUserInput, password: string): Promise<User> {
-
-
+        user.first_name = "ews_12345"
+        user.coin = 0
+        user.metadata = { hello: "world" }
         return await super.create(user, password)
     }
 

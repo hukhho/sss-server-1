@@ -1,21 +1,20 @@
 import { Table } from "@medusajs/ui";
 import { Sun } from "@medusajs/icons";
-import { useAdminCustomQuery, useProducts } from "medusa-react"
-import { useParams } from "react-router-dom"
+import { useAdminCustomQuery, useProducts } from "medusa-react";
+import { useParams } from "react-router-dom";
 import { Product } from "@medusajs/medusa";
 
 type AdminDeposit = {
-  id: string,
-  user_id: string,
-}
+  id: string;
+  user_id: string;
+};
 type AdminDepositQuery = {
-
-  expand?: string,
-  fields?: string
-}
+  expand?: string;
+  fields?: string;
+};
 type AdminDepositRes = {
-  deposits: AdminDeposit[],
-}
+  deposits: AdminDeposit[];
+};
 
 const depositsData = {
   deposits: [
@@ -50,26 +49,14 @@ const DepositTable = () => {
     AdminDepositQuery,
     AdminDepositRes
   >(
-    `/custom/test`,  // path
+    `/custom/test`, // path
     ["deposits", "list"], // queryKey
-    {
-    }
-   )
-   console.log("data", data)
+    {}
+  );
 
   return (
     <div>
-      {isLoading && <span>Loading...</span>}
-       {data && data.deposits && (
-        <span>
-          {data.deposits.map((post, index) => (
-            <span key={index}>{post.id}</span>
-          ))}
-        </span>
-       )}
-
-      
-      {/* <Table>
+      <Table>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
@@ -111,12 +98,14 @@ const DepositTable = () => {
               <Table.Cell>{deposit.revicedBankName}</Table.Cell>
               <Table.Cell>{deposit.revicedBankNumber}</Table.Cell>
               <Table.Cell>
-                <button onClick={() => handleApproveClick(deposit.id)}>Approve</button>
+                <button onClick={() => handleApproveClick(deposit.id)}>
+                  Approve
+                </button>
               </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
-      </Table> */}
+      </Table>
     </div>
   );
 };

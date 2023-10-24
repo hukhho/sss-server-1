@@ -50,6 +50,9 @@ export default (rootDirectory: string): Router | Router[] => {
     registerLoggedInUser,
   );
   router.use('/admin/custom/test', registerLoggedInCustomer);
+  
+  router.use('/admin/custom/deposit', authenticate(), registerLoggedInUser);
+  router.use('/admin/custom/deposits', authenticate(), registerLoggedInUser);
 
   // Set up routers for store and admin endpoints
   const paymentRouter = Router();

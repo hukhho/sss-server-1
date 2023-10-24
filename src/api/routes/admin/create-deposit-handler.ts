@@ -23,20 +23,7 @@ export default async (req: Request, res: Response): Promise<void> => {
     const depositService = req.scope.resolve("depositService")
 
     const depositData: DepositInput = Object.assign({}, req.body);
-    
-    // Check if the request body matches the expected structure
-    const isDataValid = (
-        typeof depositData.method === 'string' &&
-        typeof depositData.fiat_amount === 'number' &&
-        typeof depositData.txn === 'string'
-    );
-    console.log("depositData123", depositData)
-
-    if (!isDataValid) {
-        res.status(400).json({ error: "Invalid Deposit data" }); // Return a 400 error for bad request
-        return;
-    }
-
+  
     const deposit = await depositService.create(depositData).catch((err) => {
         res.status(500).json({ error: err });
     })

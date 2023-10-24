@@ -25,7 +25,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   //   }
   // };
   const result = await userService.create(dataBody, dataBody.password).catch((err) => {
-    return res.json({ error: err }).status(500)
+    res.status(500).json({ error: err });
   })
 
   res.json({

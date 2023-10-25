@@ -8,7 +8,11 @@ type DepositInput = {
     method: string
     fiat_amount: number
     typeTrans: string
+    revicedName: string
+    revicedBankName: string
+    revicedBankNumber: string
 }
+
 function createTransactionNumber() {
     const timestamp = Date.now(); // Get the current timestamp in milliseconds
     const randomSuffix = Math.floor(Math.random() * 10000); // Generate a random 4-digit number

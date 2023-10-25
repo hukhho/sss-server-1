@@ -5,6 +5,7 @@ import customRouteHandler from "./custom-route-handler";
 import testRouteHandler from "./test-route-handler";
 import createDepositHandler from "./create-deposit-handler";
 import getDepositHandler from "./get-deposit-handler";
+import updateDepositHandler from "./update-deposit-handler";
 
 // Initialize a custom router
 const router = Router();
@@ -19,6 +20,7 @@ export function attachAdminRoutes(adminRouter: Router) {
 
   router.get("/deposits", wrapHandler(getDepositHandler));
   router.post("/deposit", wrapHandler(createDepositHandler));
+  router.put("/banked/:id", wrapHandler(updateDepositHandler));
 
   // Attach routes for onboarding experience, defined separately
   onboardingRoutes(adminRouter);

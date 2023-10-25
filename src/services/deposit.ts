@@ -122,7 +122,7 @@ class DepositService extends TransactionBaseService {
   }
 
   async create(
-    data: Pick<Deposit, "method" | "fiat_amount" | "txn" | "note">
+    data: Pick<Deposit, "method" | "fiat_amount" | "txn" | "note" | "typeTrans">
   ): Promise<Deposit> {
     return this.atomicPhase_(async (manager) => {
       const depositRepo = this.activeManager_.withRepository(
@@ -141,8 +141,8 @@ class DepositService extends TransactionBaseService {
         deposit.txn = data.txn
         deposit.note = data.note
 
-        deposit.typeTrans = "DEPOSIT"
-        deposit.status = "PENDING"
+        deposit.typeTrans = data.typeTrans
+        deposit.status = "Chờ Duyệt - Chưa chuyển khoản"
         deposit.revicedBankName = "MB"
         deposit.revicedBankNumber = "3889999999996"
         deposit.revicedName = "BUI XUAN HUNG"
@@ -155,7 +155,43 @@ class DepositService extends TransactionBaseService {
 
     })
   }
+  async createWithDraw(
+    data: Pick<Deposit, "method" | "fiat_amount" | "txn" | "note" | "typeTrans" | "revicedBankName"
+    | "revicedBankNumber" | "revicedName">
+  ): Promise<Deposit> {
+    return this.atomicPhase_(async (manager) => {
+      const depositRepo = this.activeManager_.withRepository(
+        this.depositRepository_
+      )
+      const deposit = depositRepo.create()
 
+      console.log("create():::depositRepo:::Login user: ", this?.loggedInUser_?.email, " Role: ", this?.loggedInUser_?.role)
+      console.log("create():::depositRepo:::Login customer: ", this?.loggedInCustomer_?.email, " Role: ", this?.loggedInCustomer_?.has_account)
+
+      if (this?.loggedInUser_?.role === "member") {
+        deposit.coin_amount = data.fiat_amount
+        deposit.method = data.method
+        deposit.fiat_amount = data.fiat_amount
+        deposit.fiat_type = "VND"
+        deposit.txn = data.txn
+        deposit.note = data.note
+
+        deposit.typeTrans = data.typeTrans
+        deposit.status = "Chờ Duyệt"
+
+        deposit.revicedBankName = data.revicedBankName
+        deposit.revicedBankNumber = data.revicedBankNumber
+        deposit.revicedName = data.revicedName
+        
+        deposit.user_id = this?.loggedInUser_?.id
+
+        const result = await depositRepo.save(deposit)
+
+        return result
+      }
+
+    })
+  }
   async update(
     id: string,
     data: Omit<Partial<Deposit>, "id">
@@ -164,9 +200,7 @@ class DepositService extends TransactionBaseService {
       const depositRepo = manager.withRepository(
         this.depositRepository_
       )
-
       const deposit = await this.retrieve(id)
-
 
       Object.assign(deposit, data)
 

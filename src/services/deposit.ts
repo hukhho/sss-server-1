@@ -5,11 +5,26 @@ import ProductService from "./product"
 import { Lifetime } from "awilix"
 import { User } from "../models/user"
 import { MedusaError } from "@medusajs/utils"
+import { FindOperator } from "typeorm"
+declare class FilterableDepositProps {
+  id?: string | string[];
+  q?: string;
+  user_id?: string[];
+  customer_id?: string[];
+  txn?: string[]
+}
 
+type DepositSelector = FilterableDepositProps | (Selector<Deposit> & {
+  q?: string;
+  txn?: string[] | FindOperator<Deposit>;
+  user_id?: string[] | FindOperator<Deposit>;
+  customer_id?: string[] | FindOperator<Deposit>;
+});
 
-type DepositSelector = {
+type DepositSelector1 = {
   user_id?: string
   customer_id?: string
+  txn?: string
 }
 
 
@@ -41,7 +56,7 @@ class DepositService extends TransactionBaseService {
     return `Con cac hihi!`
   }
   async listAndCount(
-    selector?: Selector<Deposit>,
+    selector?: DepositSelector1,
     config: FindConfig<Deposit> = {
       skip: 0,
       take: 20,
@@ -56,31 +71,30 @@ class DepositService extends TransactionBaseService {
     return depositRepo.findAndCount(query)
   }
 
-  async list(selector?: Selector<Deposit>,
+  async list(
+    selector?: DepositSelector1,
     config: FindConfig<Deposit> = {
       skip: 0,
       take: 20,
       relations: [],
-    }): Promise<Deposit[]> {
+  }): Promise<Deposit[]> {
+    console.log("list::selector:", selector)
+    console.log("list::config:", config)
+    console.log("create():::depositRepo:::Login user: ", this?.loggedInUser_?.email, " Role: ", this?.loggedInUser_?.role)
 
-    const depositRepo = this.activeManager_.withRepository(
-      this.depositRepository_
-    )
-    console.log("list():::depositRepo:::Login user: ", " id: ", this.loggedInUser_.id, " ", this?.loggedInUser_?.email, " Role: ", this?.loggedInUser_?.role)
-    console.log("list():::depositRepo:::Login customer: ", this?.loggedInCustomer_?.email, " Role: ", this?.loggedInCustomer_?.has_account)
-    // try {
-    //   if (this?.loggedInUser_?.role === "member") {
-    //     selector.user_id = this.loggedInUser_.id
-    //   } else if (this?.loggedInCustomer_?.has_account === true) {
-    //     selector.customer_id = this.loggedInCustomer_.id
-    //   }
-    // } catch (e) {
-    //   // avoid errors when backend first runs
-    //   console.log("error: ", e)
-    // }
-    const [deposits] = await this.listAndCount(selector, config)
+    if (this?.loggedInUser_?.role === 'member') {
+      const selector123: DepositSelector1 = {
+        user_id: this?.loggedInUser_?.id
+      };
+      const [posts] = await this.listAndCount(selector123)
+      return posts
+    } else if (this?.loggedInUser_?.role === 'admin') {
+      const selector123: DepositSelector1 = {
+      };
+      const [posts] = await this.listAndCount(selector123)
+      return posts
+    }
 
-    return deposits
   }
 
   async retrieve(

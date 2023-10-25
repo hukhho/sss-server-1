@@ -39,7 +39,8 @@ class ProductService extends MedusaProductService {
     // config.select?.push('store_id')
 
     // config.relations?.push('store')
-    console.log("ProductService:::list")
+    console.log("ProductService:::list:selector", selector)
+
     if (this?.loggedInUser_?.role != 'admin' && this?.loggedInUser_?.id) {
       selector.seller_id = this.loggedInUser_.id
       config.select?.push('seller_id')
@@ -57,7 +58,7 @@ class ProductService extends MedusaProductService {
 
     // config.select?.push('store_id')
     // config.relations?.push('store')
-    console.log("ProductService:::listAndCount")
+    console.log("ProductService:::listAndCount:Selector", selector)
     if (this?.loggedInUser_?.role != 'admin' && this?.loggedInUser_?.id) {
       selector.seller_id = this.loggedInUser_.id
       config.select?.push('seller_id')

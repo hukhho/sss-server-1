@@ -6,6 +6,8 @@ import { Lifetime } from "awilix"
 import { User } from "../models/user"
 import { MedusaError } from "@medusajs/utils"
 import { FindOperator } from "typeorm"
+import UserRepository from "@medusajs/medusa/dist/repositories/user"
+import UserService from "./user"
 declare class FilterableDepositProps {
   id?: string | string[];
   q?: string;
@@ -33,6 +35,8 @@ class DepositService extends TransactionBaseService {
   static LIFE_TIME = Lifetime.SCOPED
 
   protected depositRepository_: typeof DepositRepository
+  private userService: UserService
+
   protected readonly loggedInUser_: User | null
   protected readonly loggedInCustomer_: Customer | null
 
@@ -40,6 +44,8 @@ class DepositService extends TransactionBaseService {
     // @ts-expect-error prefer-rest-params
     super(...arguments)
     this.depositRepository_ = container.depositRepository
+    this.userService = container.userService
+
     try {
       this.loggedInUser_ = container.loggedInUser
     } catch (e) {
@@ -77,7 +83,7 @@ class DepositService extends TransactionBaseService {
       skip: 0,
       take: 20,
       relations: [],
-  }): Promise<Deposit[]> {
+    }): Promise<Deposit[]> {
     console.log("list::selector:", selector)
     console.log("list::config:", config)
     console.log("create():::depositRepo:::Login user: ", this?.loggedInUser_?.email, " Role: ", this?.loggedInUser_?.role)
@@ -157,18 +163,28 @@ class DepositService extends TransactionBaseService {
   }
   async createWithDraw(
     data: Pick<Deposit, "method" | "fiat_amount" | "txn" | "note" | "typeTrans" | "revicedBankName"
-    | "revicedBankNumber" | "revicedName">
+      | "revicedBankNumber" | "revicedName">
   ): Promise<Deposit> {
     return this.atomicPhase_(async (manager) => {
       const depositRepo = this.activeManager_.withRepository(
         this.depositRepository_
       )
       const deposit = depositRepo.create()
+      const user = await this.userService.retrieve(this?.loggedInUser_?.id)
+    
 
       console.log("create():::depositRepo:::Login user: ", this?.loggedInUser_?.email, " Role: ", this?.loggedInUser_?.role)
       console.log("create():::depositRepo:::Login customer: ", this?.loggedInCustomer_?.email, " Role: ", this?.loggedInCustomer_?.has_account)
 
       if (this?.loggedInUser_?.role === "member") {
+        console.log("user: ", user)
+      
+        if (user.coin <= data.fiat_amount) {
+          throw new MedusaError(
+            MedusaError.Types.INVALID_DATA,
+            "Số tiền không đủ"
+          )
+        }
         deposit.coin_amount = data.fiat_amount
         deposit.method = data.method
         deposit.fiat_amount = data.fiat_amount
@@ -182,7 +198,7 @@ class DepositService extends TransactionBaseService {
         deposit.revicedBankName = data.revicedBankName
         deposit.revicedBankNumber = data.revicedBankNumber
         deposit.revicedName = data.revicedName
-        
+
         deposit.user_id = this?.loggedInUser_?.id
 
         const result = await depositRepo.save(deposit)

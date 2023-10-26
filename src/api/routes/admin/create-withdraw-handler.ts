@@ -32,7 +32,6 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     const depositData: DepositInput = Object.assign({ txn: createTransactionNumber() }, req.body);
 
-
     const deposit = await depositService.create(depositData).catch((err) => {
         res.status(500).json({ error: err });
     })

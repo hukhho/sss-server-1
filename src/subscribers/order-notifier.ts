@@ -21,6 +21,7 @@ class OrderNotifierSubscriber {
     const order = await this.orderService.retrieve(data.id, { relations: ["items", "items.variant", "items.variant.product"] })
     console.log("Shipped Order: order", order)
     console.log("Shipped Order: order.items", order.items)
+    
     order.items.forEach(async (item) => {
       console.log("Shipped Order: item", item)
       const sellerId = item.variant.product.seller_id;
@@ -40,9 +41,9 @@ class OrderNotifierSubscriber {
 
       console.log(newCoin);
 
-
       const coin = await this.userService.update(sellerId, { coin: newCoin })
       console.log("coin: ", coin)
+
     })
 
 

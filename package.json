@@ -53,7 +53,7 @@
     "medusa-summary-plugin": "^0.1.0",
     "prism-react-renderer": "^2.0.4",
     "typeorm": "^0.3.16",
-    "vnpay": "^0.2.0"
+    "vnpay": "^0.5.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
